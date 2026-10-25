@@ -1,0 +1,18 @@
+\begin{tikzpicture}[
+    node distance=2.5cm and 3cm,
+    state/.style={draw, rounded corners, fill=blue!10, minimum height=1cm, align=center},
+    arrow/.style={->, >=stealth, thick}
+]
+  \node [state] (pending) {Pending Confirmation\\(pending\_confirmation)};
+  \node [state, right=of pending] (confirmed) {Confirmed\\(confirmed)};
+  \node [state, right=of confirmed] (completed) {Completed\\(completed)};
+  \node [state, below=of pending] (cancelled) {Cancelled\\(cancelled)};
+  \node [state, below=of confirmed] (noshow) {No-show\\(no\_show)};
+
+  \draw[arrow] (pending) -- node[above, font=\small] {Receptionist confirms (UC-05)} 
+                            node[below, font=\small, red] {[slot\_available == True]} (confirmed);
+  \draw[arrow] (confirmed) -- node[above, font=\small] {Doctor completes visit (UC-03)} (completed);
+  \draw[arrow] (pending) -- node[left, font=\small] {Patient cancels >2h (UC-04)} (cancelled);
+  \draw[arrow] (confirmed) -- node[above, font=\small] {Patient cancels >2h (UC-04)} (cancelled);
+  \draw[arrow] (confirmed) -- node[right, font=\small] {Time passed \& no arrive} (noshow);
+\end{tikzpicture}

@@ -1,0 +1,21 @@
+\begin{tikzpicture}[
+    process/.style={circle, draw, fill=orange!20, minimum size=1.6cm, align=center, font=\small},
+    datastore/.style={draw, top color=white, bottom color=white, minimum width=2.5cm, minimum height=0.8cm, align=center, font=\small},
+    entity/.style={rectangle, draw, fill=green!10, minimum width=2cm, minimum height=1cm, align=center},
+    arrow/.style={->, >=stealth, thick}
+]
+  \node[entity] (doctor) {Doctor};
+  \node[process, right=2cm of doctor] (p51) {5.1\\Check\\Allergy};
+  \node[process, right=2.5cm of p51] (p52) {5.2\\Check\\Interaction};
+  \node[process, below=2cm of p52] (p53) {5.3\\Generate\\Warning};
+
+  \node[datastore, above=1.5cm of p51] (d4) {D4: Patient Allergy List};
+  \node[datastore, above=1.5cm of p52] (d5) {D5: Drug Interaction Catalog};
+
+  \draw[arrow] (doctor) -- node[above, font=\scriptsize] {Prescription Info} (p51);
+  \draw[arrow] (d4) -- node[right, font=\scriptsize] {Allergy Data} (p51);
+  \draw[arrow] (p51) -- node[above, font=\scriptsize] {Allergy Status} (p52);
+  \draw[arrow] (d5) -- node[right, font=\scriptsize] {Interaction Rules} (p52);
+  \draw[arrow] (p52) -- node[right, font=\scriptsize] {Conflict Flags} (p53);
+  \draw[arrow] (p53) -| node[below, font=\scriptsize, near end] {Safety Warning Alert} (doctor);
+\end{tikzpicture}

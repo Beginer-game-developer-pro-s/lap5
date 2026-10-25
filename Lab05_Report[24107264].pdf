@@ -1,0 +1,57 @@
+PHENIKAA UNIVERSITY
+SCHOOL OF INFORMATION SYSTEMS
+
+BÁO CÁO BÀI TẬP THỰC HÀNH (LAB 05)
+Môn học: Software Requirements (CSE703095)
+Chủ đề: Modeling Techniques & Diagrammatic Notations
+
+Họ và tên: [Họ và tên của bạn]
+Mã sinh viên: [MSSV của bạn]
+Lớp: [Mã lớp của bạn]
+Ngày nộp: [Ngày nộp bài]
+
+===================================================================
+
+1. MAPPING EVENT -> USE CASE (APPOINTMENT STATE MACHINE)
+Dựa trên sơ đồ Appointment Lifecycle và danh sách Use Case từ Lab 4:
+
+----------------------------------------------------------------------------------------------------------------------
+| From State           | Event / Trigger                        | Guard Condition         | To State  | Mapping Use Case / System Event        |
+----------------------------------------------------------------------------------------------------------------------
+| [Start]              | Patient requests booking               | N/A                     | Pending   | UC-02: Book Appointment                |
+| Pending confirmation | Receptionist confirms                  | [slot_available == True]| Confirmed | UC-05: Confirm Appointment             |
+| Pending confirmation | Patient cancels (>2h before)           | [time_to_slot > 2h]     | Cancelled | UC-04: Cancel Appointment              |
+| Confirmed            | Patient cancels (>2h before)           | [time_to_slot > 2h]     | Cancelled | UC-04: Cancel Appointment              |
+| Confirmed            | Doctor completes visit                 | N/A                     | Completed | UC-03: Record Visit / Consult          |
+| Confirmed            | Appointment time passed & no patient   | N/A                     | No-show   | System Trigger: Auto-update No-Show    |
+----------------------------------------------------------------------------------------------------------------------
+
+2. COMPARISON ANALYSIS: STATE MACHINE VS. DFD FOR NFR-007
+Yêu cầu NFR-007 (Booking Conflict Prevention): Hệ thống phải chủ động ngăn chặn việc đặt trùng lịch cho cùng một bác sĩ trong cùng một khung giờ.
+
+- State Machine Diagram: 
+  + Trọng tâm: Mô hình hóa vòng đời và sự chuyển đổi trạng thái của 1 đối tượng duy nhất (Appointment).
+  + Khả năng thể hiện NFR-007: Thể hiện thông qua điều kiện ràng buộc [slot_available == True] khi chuyển từ Pending confirmation sang Confirmed. Tuy nhiên, nó không chỉ rõ dữ liệu lấy từ đâu để kiểm tra trùng.
+  + Đánh giá: Mức độ phù hợp Trung bình.
+
+- Data Flow Diagram (DFD):
+  + Trọng tâm: Mô hình hóa luồng di chuyển dữ liệu, các bước xử lý (Process) và kho dữ liệu (Data Store).
+  + Khả năng thể hiện NFR-007: Thể hiện rất rõ ràng qua Tiến trình 2.0 (Book appointment) đọc dữ liệu từ kho D2 (Appointments) để tra cứu lịch hẹn trùng trước khi lưu dữ liệu mới.
+  + Đánh giá: Mức độ phù hợp Rất tốt / Ưu tiên.
+
+-> KẾT LUẬN: DFD là kỹ thuật phù hợp hơn để mô hình hóa NFR-007 vì bản chất việc ngăn chặn trùng lịch là một tiến trình xử lý dữ liệu (Data Processing & Retrieval).
+
+3. DFD LEVEL 2 FOR PROCESS 5.0 ("DRUG SAFETY WARNING")
+Phân rã tiến trình 5.0 thành DFD Level 2 với 3 tiến trình con và 2 kho dữ liệu:
+- Tiến trình con: 
+  + 5.1 Check Patient Allergy (Kiểm tra dị ứng thuốc)
+  + 5.2 Check Drug Interaction (Kiểm tra tương tác chống chỉ định)
+  + 5.3 Generate Safety Warning (Tạo cảnh báo gửi Bác sĩ)
+- Kho dữ liệu:
+  + D4: Patient Allergy List
+  + D5: Drug Interaction Catalog
+
+(Chèn hình ảnh sơ đồ DFD Level 2 rendered từ TikZ vào đây)
+
+4. MÃ NGUỒN PYTHON MỞ RỘNG
+File mã nguồn `dataflow_model.py` đã được cập nhật đầy đủ hàm tạo DFD Level 2 và bổ sung Guard Condition vào State Machine.

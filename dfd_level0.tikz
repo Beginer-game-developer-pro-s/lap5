@@ -1,0 +1,20 @@
+\begin{tikzpicture}[
+    process/.style={circle, draw, fill=blue!10, minimum size=2cm, align=center},
+    entity/.style={rectangle, draw, fill=green!10, minimum width=2.5cm, minimum height=1.2cm, align=center},
+    arrow/.style={->, >=stealth, thick}
+]
+  \node[process] (sys) {0\\MedBook\\System};
+  \node[entity, left=3cm of sys] (patient) {Patient};
+  \node[entity, above=2.5cm of sys] (receptionist) {Receptionist};
+  \node[entity, right=3cm of sys] (doctor) {Doctor};
+  \node[entity, below=2.5cm of sys] (insurance) {Insurance\\Partner};
+
+  \draw[arrow] (patient.north east) -- node[above, font=\scriptsize] {Book/cancel request} (sys.west);
+  \draw[arrow] (sys.south west) -- node[below, font=\scriptsize] {Confirmation/reminder} (patient.south east);
+  \draw[arrow] (receptionist) -- node[right, font=\scriptsize] {Confirm appointment} (sys);
+  \draw[arrow] (sys) -- node[left, font=\scriptsize] {Pending-confirmation list} (receptionist);
+  \draw[arrow] (doctor) -- node[above, font=\scriptsize] {Visit results, prescription} (sys);
+  \draw[arrow] (sys) -- node[below, font=\scriptsize] {Medical history, warnings} (doctor);
+  \draw[arrow] (sys) -- node[left, font=\scriptsize] {Insurance verification request} (insurance);
+  \draw[arrow] (insurance) -- node[right, font=\scriptsize] {Coverage verification result} (sys);
+\end{tikzpicture}

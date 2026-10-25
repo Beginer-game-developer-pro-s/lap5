@@ -1,0 +1,27 @@
+\begin{tikzpicture}[
+    process/.style={circle, draw, fill=blue!10, minimum size=1.5cm, align=center, font=\small},
+    datastore/.style={draw, top color=white, bottom color=white, minimum width=2cm, minimum height=0.7cm, align=center, font=\small},
+    entity/.style={rectangle, draw, fill=green!10, minimum width=2cm, minimum height=1cm, align=center},
+    arrow/.style={->, >=stealth, thick}
+]
+  \node[entity] (patient) {Patient};
+  \node[process, right=1.5cm of patient] (p1) {1.0\\Search\\doctors};
+  \node[process, right=1.5cm of p1] (p2) {2.0\\Book\\appointment};
+  \node[process, right=1.5cm of p2] (p3) {3.0\\Confirm \&\\remind};
+  \node[process, below=2cm of p2] (p4) {4.0\\Record\\visit};
+  \node[process, right=1.5cm of p4] (p5) {5.0\\Drug safety\\warning};
+  \node[entity, right=1.5cm of p5] (doctor) {Doctor};
+
+  \node[datastore, above=1cm of p1] (d1) {D1: Doctors};
+  \node[datastore, above=1cm of p2] (d2) {D2: Appointments};
+  \node[datastore, below=1cm of p4] (d3) {D3: Medical records};
+
+  \draw[arrow] (patient) -- (p1);
+  \draw[arrow] (p1) -- (p2);
+  \draw[arrow] (p2) -- (p3);
+  \draw[arrow] (d1) -- (p1);
+  \draw[arrow] (p2) -- (d2);
+  \draw[arrow] (p4) -- (d3);
+  \draw[arrow] (p4) -- (p5);
+  \draw[arrow] (p5) -- (doctor);
+\end{tikzpicture}
